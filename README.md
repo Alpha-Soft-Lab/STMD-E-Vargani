@@ -20,6 +20,3 @@ A modern web application for managing **Vargani (contributions/collections)** fo
 |----------|---------|---------|
 | React, Vite, TailwindCSS, Axios, Framer Motion | Node.js, Express.js, JWT, Cookie Parser | MongoDB Atlas |
 
----
-│
-└── README.md
