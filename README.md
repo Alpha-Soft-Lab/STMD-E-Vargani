@@ -7,6 +7,7 @@ A modern web application for managing **Vargani (contributions/collections)** fo
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwind-css&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer%20Motion-0055FF?logo=framer&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-FF4F00?logo=render&logoColor=white)
 
 ## 🚀 Features
