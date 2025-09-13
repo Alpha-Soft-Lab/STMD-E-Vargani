@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import logo from "../assets/img/LOGO.png";
 import config from "../config/appConfig.json";
 import CreateEntryButton from "../components/Entries/CreateEntryButton";
-import CreateEntryForm from "../components/Entries/CreateEntryForm.Jsx";
+import CreateEntryForm from "../components/Entries/CreateEntryForm.jsx";
 import ViewAllEntriesButton from "../components/Entries/ViewAllEntriesButton";
 import axios from "../services/axios";
 
