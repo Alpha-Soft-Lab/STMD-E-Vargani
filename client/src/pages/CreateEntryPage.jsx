@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import CreateEntryForm from "../components/Entries/CreateEntryForm.Jsx";
+import CreateEntryForm from "../components/Entries/CreateEntryForm.jsx";
 
 const CreateEntryPage = () => {
   const { tabId } = useParams();
