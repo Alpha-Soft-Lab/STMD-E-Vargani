@@ -8,14 +8,14 @@ dotenv.config();
 
 const app = express();
 const allowedOrigins = [
-  'http://localhost:3000', 
-  'https://stmd-e-vargani.onrender.com'
+  process.env.CLIENT_URL,
+  process.env.PROD_URL
 ];
 
 app.use(cors({
-  origin: function(origin, callback) {
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
       return callback(new Error('CORS policy blocked this origin'), false);
     }
     return callback(null, true);
@@ -24,15 +24,15 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 
 const TabRoutes = require("./routes/tabs");
 const EntryRoutes = require("./routes/entries");
-const AdminRoutes = require("./routes/admin") 
+const AdminRoutes = require("./routes/admin")
 
 app.use("/api/tabs", TabRoutes);
 app.use("/api/entries", EntryRoutes);
-app.use('/api/admin', AdminRoutes); 
+app.use('/api/admin', AdminRoutes);
 
 app.get('/api/config', (req, res) => {
   res.json(config);
