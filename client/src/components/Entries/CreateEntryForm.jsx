@@ -35,6 +35,25 @@ const CreateEntryForm = ({ tabId }) => {
     setUpiId(upiConfig.upiId || "");
   }, []);
 
+
+  const formatCustomDate = (date) => {
+    let customDate = new Date(date);
+
+    if (date.getHours() < 12) {
+      customDate.setDate(customDate.getDate() - 1);
+    }
+
+    return customDate.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, 
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -49,7 +68,7 @@ const CreateEntryForm = ({ tabId }) => {
         creatorRole,
         date: new Date(),
       });
- 
+
       setName("");
       setAmount("");
       setPaymentMethod("cash");
@@ -68,7 +87,9 @@ const CreateEntryForm = ({ tabId }) => {
     const idOnly = upiId.includes("pa=")
       ? upiId.split("pa=")[1]?.split("&")[0]
       : upiId.replace("upi://pay?", "").split("&")[0];
-    return `upi://pay?pa=${idOnly}&pn=${encodeURIComponent(upiName)}&am=${amount}&cu=INR`;
+    return `upi://pay?pa=${idOnly}&pn=${encodeURIComponent(
+      upiName
+    )}&am=${amount}&cu=INR`;
   };
 
   return (
@@ -145,15 +166,7 @@ const CreateEntryForm = ({ tabId }) => {
         <div className="text-sm text-gray-700 bg-gray-50 p-3 rounded-md space-y-1 mt-4">
           <p><strong>Creator:</strong> {creatorName}</p>
           <p><strong>Role:</strong> {creatorRole}</p>
-          <p><strong>Date:</strong> {currentTime.toLocaleString("en-IN", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true,
-          })}</p>
+          <p><strong>Date:</strong> {formatCustomDate(currentTime)}</p>
 
           {creatorAvatar && (
             <p className="flex items-center gap-2">
@@ -172,8 +185,11 @@ const CreateEntryForm = ({ tabId }) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`bg-blue-600 text-white px-4 py-2 rounded-full w-full mt-5 ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
-              }`}
+            className={`bg-blue-600 text-white px-4 py-2 rounded-full w-full mt-5 ${
+              isSubmitting
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-700"
+            }`}
           >
             {isSubmitting ? "Submitting..." : "Submit Entry"}
           </button>
@@ -185,8 +201,11 @@ const CreateEntryForm = ({ tabId }) => {
           type="submit"
           form="create-entry-form"
           disabled={isSubmitting}
-          className={`bg-blue-600 text-white px-4 py-2 rounded-full w-full max-w-md mx-auto block focus:outline-none focus:ring-2 focus:ring-blue-500 ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
-            }`}
+          className={`bg-blue-600 text-white px-4 py-2 rounded-full w-full max-w-md mx-auto block focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            isSubmitting
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-blue-700"
+          }`}
         >
           {isSubmitting ? "Submitting..." : "Submit Entry"}
         </button>
