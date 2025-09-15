@@ -179,21 +179,36 @@ const TabAllEntriesPage = () => {
   };
 
   const filteredEntries = entries.filter((entry) => {
-    const entryDate = new Date(entry.date);
-    const fromDate = filters.fromDate ? new Date(filters.fromDate) : null;
-    const toDate = filters.toDate ? new Date(filters.toDate) : null;
+    const entryDate = new Date(entry.date).toISOString().split("T")[0];
+    const fromDate = filters.fromDate || null;
+    const toDate = filters.toDate || null;
+    const specificDate = filters.specificDate || null;
 
     const matchDate =
-      (!fromDate || entryDate >= fromDate) &&
-      (!toDate || entryDate <= toDate);
+      specificDate
+        ? entryDate === specificDate
+        : (!fromDate || entryDate >= fromDate) && (!toDate || entryDate <= toDate);
 
     const matchPayment =
       !filters.paymentMethod || entry.paymentMethod === filters.paymentMethod;
 
     const matchStatus = !filters.status || entry.status === filters.status;
 
-    return matchDate && matchPayment && matchStatus;
+    const matchMinAmount =
+      !filters.minAmount || entry.amount >= Number(filters.minAmount);
+
+    const matchMaxAmount =
+      !filters.maxAmount || entry.amount <= Number(filters.maxAmount);
+
+    return matchDate && matchPayment && matchStatus && matchMinAmount && matchMaxAmount;
   });
+
+
+  const totalCollected = filteredEntries.reduce(
+    (sum, entry) => sum + Number(entry.amount),
+    0
+  );
+
 
   if (loading)
     return <p className="text-center mt-10 text-gray-600">Loading entries...</p>;
@@ -203,7 +218,15 @@ const TabAllEntriesPage = () => {
   return (
     <>
       <div className="p-4 sm:p-6 lg:p-8 max-w-10xl mx-auto">
-        <EntryFilter filters={filters} onFilterChange={handleFilterChange} />
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-2 gap-2 sm:gap-4">
+          <EntryFilter filters={filters} onFilterChange={handleFilterChange} />
+
+          <div className="bg-slate-50/80 backdrop-blur-md shadow-md rounded-xl px-3 sm:px-4 py-2 flex-shrink-0">
+            <p className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+              Total Collected: <span className="text-green-600">₹{totalCollected}</span>
+            </p>
+          </div>
+        </div>
 
         {filteredEntries.length === 0 ? (
           <p className="text-center text-gray-500">No entries found.</p>
@@ -222,7 +245,6 @@ const TabAllEntriesPage = () => {
           </div>
         )}
       </div>
-
       <div className="fixed bottom-6 right-5">
         <ExportToExcelButton
           data={filteredEntries}
