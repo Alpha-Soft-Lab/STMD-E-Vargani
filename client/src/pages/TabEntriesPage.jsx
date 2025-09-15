@@ -33,9 +33,8 @@ const EntryCard = ({ entry, isAdmin, onDelete, onEdit, onViewPavti }) => {
         <div>
           <span className="font-medium">Status :</span>{" "}
           <span
-            className={`inline-block px-3 py-1 rounded-full uppercase text-white text-xs font-medium ${
-              entry.status === "fulfilled" ? "bg-green-500" : "bg-yellow-500"
-            }`}
+            className={`inline-block px-3 py-1 rounded-full uppercase text-white text-xs font-medium ${entry.status === "fulfilled" ? "bg-green-500" : "bg-yellow-500"
+              }`}
           >
             {entry.status}
           </span>
@@ -117,7 +116,7 @@ const TabAllEntriesPage = () => {
       try {
         const res = await axios.get(`/tabs/${tabId}`);
         setTab(res.data);
-      } catch {}
+      } catch { }
     };
     fetchTab();
   }, [tabId]);
@@ -237,11 +236,10 @@ const TabAllEntriesPage = () => {
 
       <div className="fixed bottom-6 right-5 flex items-center gap-3 z-50">
         <div className="bg-slate-100/90 backdrop-blur-md shadow-md rounded-full px-4 py-3 flex items-center justify-center min-w-[180px]">
-          <p className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+          <p className="text-sm font-semibold text-gray-700 m-0 leading-none whitespace-nowrap flex items-center gap-2">
             Total Collected: <span className="text-green-600">₹{totalCollected}</span>
           </p>
         </div>
-
         <ExportToExcelButton
           data={filteredEntries}
           fileName={`Collection-of-${tab?.name || "Tab"}`}
