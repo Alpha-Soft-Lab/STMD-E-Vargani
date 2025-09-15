@@ -29,6 +29,7 @@ const TabDetailsPage = () => {
         setAnalytics(analyticsRes.data);
         setEntries(entriesRes.data.entries || []);
       } catch (error) {
+        console.error("Error fetching tab details:", error);
       } finally {
         setLoading(false);
       }
@@ -36,11 +37,13 @@ const TabDetailsPage = () => {
 
     fetchAnalytics();
   }, [tabId]);
-
+  
   const entrySummary = {};
   entries.forEach((e) => {
-    const date = e.date?.split("T")[0];
-    if (date) entrySummary[date] = (entrySummary[date] || 0) + 1;
+    if (!e.date) return;
+    const localDate = new Date(e.date);
+    const dateKey = localDate.toLocaleDateString("en-CA"); 
+    entrySummary[dateKey] = (entrySummary[dateKey] || 0) + 1;
   });
 
   const StatCard = ({ label, value, color }) => (
@@ -51,7 +54,11 @@ const TabDetailsPage = () => {
   );
 
   if (loading || !analytics) {
-    return <div className="p-6 text-center text-gray-600">Loading tab details...</div>;
+    return (
+      <div className="p-6 text-center text-gray-600">
+        Loading tab details...
+      </div>
+    );
   }
 
   return (
@@ -60,15 +67,24 @@ const TabDetailsPage = () => {
         <div className="max-w-6xl mx-auto bg-gradient-to-br from-white/90 to-slate-100/50 backdrop-blur-md rounded-3xl p-4 shadow-inner border border-gray-200">
           <div className="bg-white/30 rounded-2xl shadow-md p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <img src={logo} alt={config.appName} className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
+              <img
+                src={logo}
+                alt={config.appName}
+                className="w-14 h-14 sm:w-16 sm:h-16 object-contain"
+              />
               <div>
-                <h2 className="text-xl font-bold text-gray-800 leading-tight">{config.appName}</h2>
-                <p className="text-sm font-medium text-gray-600 tracking-wide">{config.subtitle}</p>
+                <h2 className="text-xl font-bold text-gray-800 leading-tight">
+                  {config.appName}
+                </h2>
+                <p className="text-sm font-medium text-gray-600 tracking-wide">
+                  {config.subtitle}
+                </p>
               </div>
             </div>
             <div className="text-sm sm:text-base">
               <p className="font-medium text-gray-700">
-                <span className="text-gray-900 font-semibold">Tab Name:</span> {analytics.tabName}
+                <span className="text-gray-900 font-semibold">Tab Name:</span>{" "}
+                {analytics.tabName}
               </p>
               <p className="font-medium text-gray-700">
                 <span className="text-gray-900 font-semibold">Created At:</span>{" "}
@@ -85,10 +101,29 @@ const TabDetailsPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto bg-gradient-to-br from-white/50 to-slate-50/50 p-4 rounded-2xl shadow-md">
-        <StatCard label="📋 Total Entries" value={analytics.totalEntries} color="text-gray-800" />
-        <StatCard label="💰 Total Amount" value={`₹ ${analytics.totalAmount}`} color="text-gray-800" />
-        <StatCard label="✅ Fulfilled" value={analytics.countByStatus.fulfilled || analytics.countByStatus.completed} color="text-green-600" />
-        <StatCard label="🕒 Pending" value={analytics.countByStatus.pending} color="text-yellow-600" />
+        <StatCard
+          label="📋 Total Entries"
+          value={analytics.totalEntries}
+          color="text-gray-800"
+        />
+        <StatCard
+          label="💰 Total Amount"
+          value={`₹ ${analytics.totalAmount}`}
+          color="text-gray-800"
+        />
+        <StatCard
+          label="✅ Fulfilled"
+          value={
+            analytics.countByStatus.fulfilled ||
+            analytics.countByStatus.completed
+          }
+          color="text-green-600"
+        />
+        <StatCard
+          label="🕒 Pending"
+          value={analytics.countByStatus.pending}
+          color="text-yellow-600"
+        />
       </div>
 
       <div className="max-w-6xl mx-auto ">
@@ -116,11 +151,14 @@ const TabDetailsPage = () => {
             </thead>
             <tbody>
               {Object.entries(entrySummary).map(([dateKey, count]) => {
-                const formatted = new Date(dateKey + "T00:00:00Z").toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                });
+                const formatted = new Date(dateKey).toLocaleDateString(
+                  "en-GB",
+                  {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }
+                );
                 return (
                   <tr key={dateKey} className="hover:bg-gray-50">
                     <td className="p-2 border-b">{formatted}</td>
