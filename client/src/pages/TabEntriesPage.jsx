@@ -33,8 +33,9 @@ const EntryCard = ({ entry, isAdmin, onDelete, onEdit, onViewPavti }) => {
         <div>
           <span className="font-medium">Status :</span>{" "}
           <span
-            className={`inline-block px-3 py-1 rounded-full uppercase text-white text-xs font-medium ${entry.status === "fulfilled" ? "bg-green-500" : "bg-yellow-500"
-              }`}
+            className={`inline-block px-3 py-1 rounded-full uppercase text-white text-xs font-medium ${
+              entry.status === "fulfilled" ? "bg-green-500" : "bg-yellow-500"
+            }`}
           >
             {entry.status}
           </span>
@@ -74,7 +75,6 @@ const EntryCard = ({ entry, isAdmin, onDelete, onEdit, onViewPavti }) => {
   );
 };
 
-
 const TabAllEntriesPage = () => {
   const { tabId } = useParams();
   const { isAdmin } = useAuth();
@@ -94,7 +94,6 @@ const TabAllEntriesPage = () => {
 
   const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [entryToEdit, setEntryToEdit] = useState(null);
-
 
   const [pavtiOpen, setPavtiOpen] = useState(false);
   const [pavtiEntry, setPavtiEntry] = useState(null);
@@ -118,7 +117,7 @@ const TabAllEntriesPage = () => {
       try {
         const res = await axios.get(`/tabs/${tabId}`);
         setTab(res.data);
-      } catch { }
+      } catch {}
     };
     fetchTab();
   }, [tabId]);
@@ -155,9 +154,7 @@ const TabAllEntriesPage = () => {
     try {
       const res = await axios.put(`/entries/${entryToEdit._id}`, updatedData);
       setEntries((prev) =>
-        prev.map((e) =>
-          e._id === entryToEdit._id ? { ...e, ...res.data } : e
-        )
+        prev.map((e) => (e._id === entryToEdit._id ? { ...e, ...res.data } : e))
       );
       showSuccess("Entry updated successfully");
     } catch {
@@ -203,12 +200,10 @@ const TabAllEntriesPage = () => {
     return matchDate && matchPayment && matchStatus && matchMinAmount && matchMaxAmount;
   });
 
-
   const totalCollected = filteredEntries.reduce(
     (sum, entry) => sum + Number(entry.amount),
     0
   );
-
 
   if (loading)
     return <p className="text-center mt-10 text-gray-600">Loading entries...</p>;
@@ -220,12 +215,6 @@ const TabAllEntriesPage = () => {
       <div className="p-4 sm:p-6 lg:p-8 max-w-10xl mx-auto">
         <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-2 gap-2 sm:gap-4">
           <EntryFilter filters={filters} onFilterChange={handleFilterChange} />
-
-          <div className="bg-slate-50/80 backdrop-blur-md shadow-md rounded-xl px-3 sm:px-4 py-2 flex-shrink-0">
-            <p className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-              Total Collected: <span className="text-green-600">₹{totalCollected}</span>
-            </p>
-          </div>
         </div>
 
         {filteredEntries.length === 0 ? (
@@ -245,7 +234,14 @@ const TabAllEntriesPage = () => {
           </div>
         )}
       </div>
-      <div className="fixed bottom-6 right-5">
+
+      <div className="fixed bottom-6 right-5 flex items-center gap-3 z-50">
+        <div className="bg-slate-100/90 backdrop-blur-md shadow-md rounded-full px-4 py-3 flex items-center justify-center min-w-[180px]">
+          <p className="text-sm font-semibold text-gray-700 whitespace-nowrap">
+            Total Collected: <span className="text-green-600">₹{totalCollected}</span>
+          </p>
+        </div>
+
         <ExportToExcelButton
           data={filteredEntries}
           fileName={`Collection-of-${tab?.name || "Tab"}`}
