@@ -233,10 +233,9 @@ const TabAllEntriesPage = () => {
           </div>
         )}
       </div>
-
-      <div className="fixed bottom-6 right-5 flex items-center gap-3 z-50">
-        <div className="bg-slate-100/90 backdrop-blur-md shadow-md rounded-full px-4 py-3 flex items-center justify-center min-w-[180px]">
-          <p className="text-sm font-semibold text-gray-700 m-0 leading-none whitespace-nowrap flex items-center gap-2">
+      <div className="fixed bottom-6 right-5 flex items-center gap-3 z-30">
+        <div className="bg-slate-200/60 backdrop-blur-md rounded-full px-4 py-3 flex items-center justify-center min-w-[180px] hover:bg-slate-300  transition-all duration-200 cursor-pointer">
+          <p className="font-medium text-gray-700 m-0 leading-none whitespace-nowrap flex items-center gap-2">
             Total Collected: <span className="text-green-600">₹{totalCollected}</span>
           </p>
         </div>
@@ -245,6 +244,7 @@ const TabAllEntriesPage = () => {
           fileName={`Collection-of-${tab?.name || "Tab"}`}
         />
       </div>
+
 
       <DeleteConfirmPopup
         isOpen={deletePopupOpen}
