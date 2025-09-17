@@ -35,22 +35,16 @@ const CreateEntryForm = ({ tabId }) => {
     setUpiId(upiConfig.upiId || "");
   }, []);
 
-
   const formatCustomDate = (date) => {
-    let customDate = new Date(date);
-
-    if (date.getHours() < 12) {
-      customDate.setDate(customDate.getDate() - 1);
-    }
-
-    return customDate.toLocaleString("en-IN", {
+    return new Date(date).toLocaleString("en-IN", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: false, 
+      hour12: false,
+      timeZone: "Asia/Kolkata",
     });
   };
 
