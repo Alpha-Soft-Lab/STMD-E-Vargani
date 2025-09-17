@@ -62,7 +62,6 @@ const EntryCard = ({ entry, isAdmin, onDelete, onEdit, onViewPavti }) => {
             </button>
           </>
         )}
-
         <button
           onClick={() => onViewPavti(entry)}
           className="text-green-600 text-sm hover:underline"
@@ -121,9 +120,7 @@ const TabAllEntriesPage = () => {
     fetchTab();
   }, [tabId]);
 
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-  };
+  const handleFilterChange = (newFilters) => setFilters(newFilters);
 
   const openDeletePopup = (entryId) => {
     setEntryToDelete(entryId);
@@ -204,16 +201,21 @@ const TabAllEntriesPage = () => {
     0
   );
 
-  if (loading)
-    return <p className="text-center mt-10 text-gray-600">Loading entries...</p>;
-  if (error)
-    return <p className="text-center mt-10 text-red-500">{error}</p>;
+  if (loading) return <p className="text-center mt-10 text-gray-600">Loading entries...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
     <>
       <div className="p-4 sm:p-6 lg:p-8 max-w-10xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-2 gap-2 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-4 gap-4">
           <EntryFilter filters={filters} onFilterChange={handleFilterChange} />
+          <div className="w-full sm:w-auto flex justify-center sm:justify-end">
+            <div className="bg-slate-200/60 backdrop-blur-md rounded-full px-6 py-3 flex items-center justify-center min-w-[180px] hover:bg-slate-300 transition-all duration-200 cursor-pointer">
+              <p className="font-medium text-gray-700 m-0 leading-none whitespace-nowrap flex items-center gap-2">
+                Total Collected: <span className="text-green-600">₹{totalCollected.toLocaleString("en-IN")}</span>
+              </p>
+            </div>
+          </div>
         </div>
 
         {filteredEntries.length === 0 ? (
@@ -233,18 +235,12 @@ const TabAllEntriesPage = () => {
           </div>
         )}
       </div>
-      <div className="fixed bottom-6 right-5 flex items-center gap-3 z-30">
-        <div className="bg-slate-200/60 backdrop-blur-md rounded-full px-4 py-3 flex items-center justify-center min-w-[180px] hover:bg-slate-300  transition-all duration-200 cursor-pointer">
-          <p className="font-medium text-gray-700 m-0 leading-none whitespace-nowrap flex items-center gap-2">
-            Total Collected: <span className="text-green-600">₹{totalCollected}</span>
-          </p>
-        </div>
+      <div className="fixed bottom-6 right-5 z-30">
         <ExportToExcelButton
           data={filteredEntries}
           fileName={`Collection-of-${tab?.name || "Tab"}`}
         />
       </div>
-
 
       <DeleteConfirmPopup
         isOpen={deletePopupOpen}
